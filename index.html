@@ -45,6 +45,29 @@
   --code-bg:#0d0f17; --sel:rgba(124,58,237,.2);
   --user-bubble:linear-gradient(135deg,#7c3aed,#4f46e5 55%,#0284c7);
 }
+/* ============ ПРЕМИУМ-ТЕМА «ЗОЛОТОЙ» ============
+   Доступна только аккаунту Atrgro9@gmail.com (проверка в JS).
+   Тот же набор переменных, что у тёмной/светлой: весь интерфейс
+   перекрашивается автоматически. */
+[data-theme="gold"]{
+  --bg:#0a0703; --bg-2:#120d06; --panel:rgba(30,23,12,.74); --panel-solid:#151009;
+  --glass:rgba(255,215,130,.055); --glass-h:rgba(255,215,130,.11);
+  --line:rgba(255,208,110,.15); --line-2:rgba(255,208,110,.28);
+  --txt:#fdf6e5; --txt-2:#d8c49a; --txt-3:#9a8457;
+  --a1:#f0c14b; --a2:#ffe6a0; --a3:#c9922a;
+  --shadow:0 24px 70px -16px rgba(0,0,0,.9);
+  --code-bg:#0f0b05; --sel:rgba(240,193,75,.3);
+  --user-bubble:linear-gradient(135deg,#8a5c07,#d4a52a 52%,#f8dd93);
+}
+[data-theme="gold"] .bg-tint{background:linear-gradient(180deg,rgba(10,7,3,.62),rgba(10,7,3,.36) 40%,rgba(10,7,3,.84))}
+[data-theme="gold"] .bg-photo.on{opacity:.36}
+[data-theme="gold"] .blob{opacity:.4}
+[data-theme="gold"] .b1{background:radial-gradient(circle,#b8860b,transparent 65%)}
+[data-theme="gold"] .b2{background:radial-gradient(circle,#8a5c07,transparent 65%)}
+[data-theme="gold"] .b3{background:radial-gradient(circle,#e0b64a,transparent 65%)}
+[data-theme="gold"] .msg.me .bubble,
+[data-theme="gold"] .av.me{color:#1b1305;box-shadow:0 14px 34px -14px rgba(212,165,42,.85)}
+[data-theme="gold"] .msg.me .bubble strong{color:#1b1305}
 *,*::before,*::after{box-sizing:border-box}
 /* --z — текущий внутренний зум. Размеры делим на него, иначе при зуме
    приложение становится больше экрана и поле ввода уезжает за нижний край. */
@@ -886,6 +909,16 @@ body.z-grab,body.z-grab *{cursor:ns-resize!important;user-select:none!important}
 }
 #nickIn::placeholder{color:var(--txt-3);font-weight:550}
 #nickIn:focus{border-color:var(--a1);box-shadow:0 0 0 4px rgba(139,92,246,.16);background:var(--glass-h)}
+/* вкладка «Разнообразить» (премиум) */
+.set-link[hidden]{display:none}
+#aiNameIn,#sysPromptIn{
+  width:100%;padding:14px 16px;border-radius:14px;background:var(--glass);border:1px solid var(--line-2);
+  color:var(--txt);font-size:16px;font-weight:700;letter-spacing:-.3px;outline:0;
+  transition:.35s var(--ease);
+}
+#sysPromptIn{min-height:190px;resize:vertical;font-size:14.5px;font-weight:600;line-height:1.55}
+#aiNameIn::placeholder,#sysPromptIn::placeholder{color:var(--txt-3);font-weight:550}
+#aiNameIn:focus,#sysPromptIn:focus{border-color:var(--a1);box-shadow:0 0 0 4px rgba(139,92,246,.16);background:var(--glass-h)}
 /* ============ ГАЛЕРЕЯ АВАТАРОК ============ */
 .gal{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:12px;
@@ -1678,6 +1711,151 @@ button,a,.chat,.gal button{-webkit-tap-highlight-color:transparent}
   .chat:hover{background:transparent;color:var(--txt-2)}
   .chat.active:hover{background:linear-gradient(100deg,rgba(124,58,237,.18),rgba(34,211,238,.1));color:var(--txt)}
 }
+
+/* ============================================================
+   ПРЕМИУМ (только Atrgro9@gmail.com)
+   Включается классом body.premium из JS.
+   ============================================================ */
+
+/* золотая буква V на главном экране вместо иконки Махиру */
+.orb-v{
+  position:absolute;inset:26px;border-radius:50%;z-index:4;
+  display:none;place-items:center;
+  background:radial-gradient(circle at 32% 26%,#33240a,#0d0902 72%);
+  border:1.5px solid rgba(255,214,120,.55);
+  box-shadow:0 0 28px rgba(240,193,75,.4),inset 0 0 26px rgba(240,193,75,.16);
+  will-change:transform;animation:float 8s ease-in-out infinite;
+}
+.orb-v span{
+  font-family:var(--font);font-weight:900;font-size:46px;line-height:1;
+  letter-spacing:-2px;padding-bottom:4px;
+  background:linear-gradient(165deg,#fff8d8,#f6d271 34%,#b8860b 62%,#fff0bb);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 3px 10px rgba(240,193,75,.55));
+}
+.orb-v::after{
+  content:'';position:absolute;inset:-7px;border-radius:50%;
+  border:1px dashed rgba(255,214,120,.35);
+  animation:spin 18s linear infinite;
+}
+@keyframes goldPulse{0%,100%{opacity:.5}50%{opacity:1}}
+body.premium .orb .ph{display:none}
+body.premium .orb-v{display:grid}
+body.premium .orb-fx::before{
+  background:
+    radial-gradient(circle at 32% 30%,rgba(240,193,75,.5),transparent 62%),
+    radial-gradient(circle at 70% 72%,rgba(255,230,160,.35),transparent 62%),
+    radial-gradient(circle at 50% 50%,rgba(184,134,11,.28),transparent 68%);
+}
+
+/* золотой бренд в шапке и сайдбаре */
+body.premium .brand-name,body.premium .tb-name{
+  background:linear-gradient(100deg,#fff4c8,#f3c94f 45%,#ffecb0);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+body.premium .tb-name b{color:#ffe6a0}
+body.premium .brand-sub{color:#e8c46a}
+body.premium .tb-ava{
+  background:linear-gradient(135deg,#f7df95,#b8860b);color:#231803;
+  box-shadow:0 0 0 1.5px rgba(255,224,140,.7),0 6px 18px -8px rgba(240,193,75,.85);
+}
+
+/* карточка «Золотой» в настройках */
+.theme-cards button[hidden]{display:none}
+#themeGold{border-color:rgba(240,193,75,.4);color:#f0d18a;background:linear-gradient(150deg,rgba(240,193,75,.16),rgba(240,193,75,.04))}
+#themeGold svg{color:#f0c14b}
+#themeGold.on{box-shadow:inset 0 0 0 2px rgba(240,193,75,.75);color:#fff3cc}
+
+/* блок «Ваш стиль» в настройках */
+.prem-box{
+  position:relative;overflow:hidden;border-radius:20px;padding:22px 24px;
+  display:flex;flex-direction:column;gap:10px;align-items:flex-start;
+  background:linear-gradient(135deg,rgba(240,193,75,.16),rgba(240,193,75,.04) 60%);
+  border:1px solid rgba(240,193,75,.42);
+  box-shadow:0 20px 48px -26px rgba(240,193,75,.75);
+}
+.prem-box::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.16) 50%,transparent 68%);
+  transform:translateX(-130%);animation:premShine 6s ease-in-out infinite;
+}
+@keyframes premShine{0%{transform:translateX(-130%)}60%,100%{transform:translateX(130%)}}
+.prem-badge{
+  display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:99px;
+  font-size:11.5px;font-weight:900;letter-spacing:.9px;text-transform:uppercase;
+  color:#2a1c02;background:linear-gradient(135deg,#f8e2a0,#e3b23c);
+  box-shadow:0 8px 20px -10px rgba(240,193,75,.9);
+}
+.prem-badge svg{width:13px;height:13px}
+.prem-style{
+  font-size:26px;font-weight:900;letter-spacing:-.8px;line-height:1.15;
+  background:linear-gradient(100deg,#fff6d5,#f3c94f 50%,#ffeaa8);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.prem-note{font-size:13px;font-weight:650;line-height:1.5;color:var(--txt-2)}
+
+/* ---------- окно поздравления ---------- */
+#premModal{z-index:130;background:rgba(6,4,1,.72)}
+.prem-card{
+  width:min(580px,100%);max-height:92dvh;overflow-y:auto;position:relative;
+  padding:38px 32px 30px;border-radius:28px;text-align:center;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(240,193,75,.28),transparent 55%),
+    linear-gradient(160deg,#1b1307,#0d0903 62%);
+  border:1px solid rgba(240,193,75,.5);
+  box-shadow:0 44px 110px -30px rgba(0,0,0,.95),0 0 60px -22px rgba(240,193,75,.7);
+  transform:translateY(26px) scale(.94);opacity:0;
+  transition:.6s var(--ease);
+}
+.modal-wrap.show .prem-card{transform:none;opacity:1}
+.prem-crown{
+  width:80px;height:80px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 34% 28%,#3a2a0c,#120c03 72%);
+  border:1.5px solid rgba(255,214,120,.6);
+  box-shadow:0 0 34px rgba(240,193,75,.45),inset 0 0 24px rgba(240,193,75,.2);
+  animation:float 6s ease-in-out infinite;
+}
+.prem-crown svg{width:40px;height:40px;color:#f6d271;filter:drop-shadow(0 2px 8px rgba(240,193,75,.7))}
+.prem-kicker{
+  font-size:11.5px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase;
+  color:#e8c46a;margin-bottom:12px;
+}
+.prem-h{
+  font-size:clamp(26px,6vw,36px);font-weight:900;letter-spacing:-1.2px;line-height:1.1;margin:0 0 14px;
+  background:linear-gradient(100deg,#fff8dd,#f5cd5c 40%,#ffeeb3 78%,#f0c14b);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.prem-p{font-size:15.5px;line-height:1.62;font-weight:600;color:#e8ddc4;margin:0 0 10px}
+.prem-p b{color:#ffe09a;font-weight:850}
+.prem-mail{
+  display:inline-block;margin:6px 0 16px;padding:8px 16px;border-radius:99px;
+  font-family:var(--mono);font-size:13px;font-weight:700;color:#ffe6a0;
+  background:rgba(240,193,75,.1);border:1px solid rgba(240,193,75,.32);
+}
+.prem-ok{
+  width:100%;height:52px;margin-top:14px;border-radius:16px;
+  font-size:15.5px;font-weight:900;letter-spacing:-.2px;color:#2a1c02;
+  background:linear-gradient(135deg,#ffe9a8,#e9b62f 55%,#f7d97e);
+  box-shadow:0 18px 40px -18px rgba(240,193,75,.95);transition:.28s var(--ease);
+}
+.prem-ok:hover{transform:translateY(-2px);filter:brightness(1.05)}
+/* золотые искры */
+.prem-sparks{position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none}
+.prem-spark{
+  position:absolute;top:0;left:0;width:7px;height:7px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,#fff6cc,#e9b62f);
+  box-shadow:0 0 10px rgba(240,193,75,.9);
+  animation:sparkFall linear infinite;
+}
+@keyframes sparkFall{
+  0%{transform:translate3d(0,-30px,0) scale(.5);opacity:0}
+  12%{opacity:1}
+  100%{transform:translate3d(var(--sx,0),110%,0) scale(1);opacity:0}
+}
+@media (max-width:640px){
+  .prem-card{padding:30px 20px 24px;border-radius:22px}
+  .prem-style{font-size:23px}
+}
 </style>
 </head>
 <body>
@@ -1778,7 +1956,7 @@ button,a,.chat,.gal button{-webkit-tap-highlight-color:transparent}
       <div class="stream-inner" id="inner"></div>
 
       <div class="empty" id="empty">
-        <div class="orb"><div class="orb-fx"><i></i><i></i><i></i></div><i class="ph"></i></div>
+        <div class="orb"><div class="orb-fx"><i></i><i></i><i></i></div><i class="ph"></i><div class="orb-v" aria-hidden="true"><span>V</span></div></div>
         <div class="hello" id="hello">Рада вас видеть!</div>
       </div>
 
@@ -1923,6 +2101,22 @@ button,a,.chat,.gal button{-webkit-tap-highlight-color:transparent}
   </div>
 </div>
 
+<!-- ============ ПОЗДРАВЛЕНИЕ ПРЕМИУМ (Atrgro9@gmail.com) ============ -->
+<div class="modal-wrap" id="premModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="premTitle">
+  <div class="prem-card" id="premCard">
+    <div class="prem-sparks" id="premSparks" aria-hidden="true"></div>
+    <div class="prem-crown">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 3 5-6 5 6 4-3-2 11H5L3 8z"/><path d="M5 19h14"/></svg>
+    </div>
+    <div class="prem-kicker">Премиум</div>
+    <h2 class="prem-h" id="premTitle">Поздравляем!</h2>
+    <p class="prem-p">Вы являетесь <b>премиум пользователем этого сайта</b>.</p>
+    <p class="prem-p">Вас назначил <b>разработчик этого сайта</b> — вам открыт особый <b>золотой красивый стиль</b> и золотая буква <b>V</b> на главном экране.</p>
+    <div class="prem-mail">Atrgro9@gmail.com</div>
+    <button class="prem-ok" id="premOk" type="button">Спасибо! ✨</button>
+  </div>
+</div>
+
 <!-- ============ НАСТРОЙКИ ============ -->
 <div class="modal-wrap" id="modal" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true">
@@ -1950,6 +2144,10 @@ button,a,.chat,.gal button{-webkit-tap-highlight-color:transparent}
         <button class="set-link" data-tab="api">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="4"/></svg>
           <span data-i18n="tabApi">Модель и API</span>
+        </button>
+        <button class="set-link" data-tab="vibe" id="vibeNavBtn" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.7L18.6 9.6l-4.7 1.9L12 16.2l-1.9-4.7L5.4 9.6l4.7-1.9L12 3z"/><path d="M18.5 15.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1z"/></svg>
+          <span>Разнообразить</span>
         </button>
         <button class="set-link" data-tab="dev">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 8.5L4.5 12l4 3.5M15.5 8.5l4 3.5-4 3.5M13.6 4.6l-3.2 14.8"/></svg>
@@ -2004,6 +2202,19 @@ button,a,.chat,.gal button{-webkit-tap-highlight-color:transparent}
 
         <!-- ОБЩИЕ: тема + язык -->
         <div class="tabpane on" id="paneGeneral">
+          <!-- премиум-стиль: только для Atrgro9@gmail.com -->
+          <div class="set-sec" id="premSec" hidden>
+            <div class="set-h">Ваш стиль</div>
+            <div class="prem-box">
+              <div class="prem-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 3 5-6 5 6 4-3-2 11H5L3 8z"/></svg>
+                Премиум
+              </div>
+              <div class="prem-style">Золотой красивый</div>
+              <div class="prem-note">Вы являетесь премиум пользователем этого сайта. Вас назначил разработчик этого сайта — поэтому у вас включён золотой стиль и буква V на главном экране.</div>
+            </div>
+          </div>
+
           <div class="set-sec">
             <div class="set-h" data-i18n="themeTitle">Тема</div>
             <div class="theme-cards" id="themeSeg">
@@ -2014,6 +2225,11 @@ button,a,.chat,.gal button{-webkit-tap-highlight-color:transparent}
               <button data-t="dark" class="on">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
                 <span data-i18n="themeDark">Тёмная</span>
+              </button>
+              <!-- премиум-стиль: показывается только аккаунту Atrgro9@gmail.com -->
+              <button data-t="gold" id="themeGold" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 3 5-6 5 6 4-3-2 11H5L3 8z"/><path d="M5 19h14"/></svg>
+                <span>Золотой</span>
               </button>
             </div>
           </div>
@@ -2191,6 +2407,38 @@ button,a,.chat,.gal button{-webkit-tap-highlight-color:transparent}
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- РАЗНООБРАЗИТЬ (только премиум): имя ИИ + системный промт -->
+        <div class="tabpane" id="paneVibe">
+          <div class="set-sec">
+            <div class="set-line">
+              <div class="set-h">Разнообразить</div>
+              <div class="prem-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 3 5-6 5 6 4-3-2 11H5L3 8z"/></svg>
+                Премиум
+              </div>
+            </div>
+            <div class="fld-h" style="margin-top:6px">Здесь вы задаёте характер ИИ: как её называть и по каким правилам она отвечает. Вкладка доступна только премиум-аккаунту.</div>
+          </div>
+
+          <div class="set-sec">
+            <div class="set-h">Имя для ИИ</div>
+            <input type="text" id="aiNameIn" maxlength="32" spellcheck="false" placeholder="Например: Махиру">
+            <div class="fld-h">ИИ будет называть себя этим именем и представится им при знакомстве.</div>
+          </div>
+
+          <div class="set-sec">
+            <div class="set-h">Системный промт</div>
+            <textarea id="sysPromptIn" spellcheck="false" placeholder="Например: отвечай кратко и с юмором, обращайся ко мне «босс», объясняй простыми словами"></textarea>
+            <div class="set-btns">
+              <button type="button" class="btn btn-up" id="vibeSave">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Сохранить</span>
+              </button>
+            </div>
+            <div class="fld-h">Правила добавляются к системному промту и начинают действовать со следующего сообщения.</div>
           </div>
         </div>
       </div>
@@ -2824,17 +3072,40 @@ const app=$('app'), sidebar=$('sidebar'), scrim=$('scrim'), chatList=$('chatList
 /* ============================================================
    Тема / тема
    ============================================================ */
+/* ---------- ПРЕМИУМ ----------
+   Ровно один адрес: Atrgro9@gmail.com. Проверка идёт по сессии
+   в localStorage и по аккаунту, поэтому стиль нельзя включить
+   через настройки другого пользователя. */
+const PREMIUM_MAIL = 'atrgro9@gmail.com';
+function isPremiumMail(m){
+  return String(m || '').trim().toLowerCase() === PREMIUM_MAIL;
+}
+function premiumSession(){
+  try { return isPremiumMail(localStorage.getItem('maxiru.session.v1')); }
+  catch(e){ return false; }
+}
+/* текущий вошедший аккаунт премиум? */
+function isPremium(){ return isPremiumMail(accMail); }
+
 let theme = localStorage.getItem('maxiru.theme') || 'dark';
 function setTheme(th){          // параметр НЕ переименовываем в t — это функция перевода
+  /* золотая тема — только премиуму, остальным она недоступна */
+  if (th === 'gold' && !premiumSession()) th = 'dark';
   theme = th;
   document.documentElement.setAttribute('data-theme', th);
   localStorage.setItem('maxiru.theme', th);
   themeIcon.innerHTML = th === 'dark'
     ? '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'
-    : '<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8"/>';
+    : th === 'gold'
+      ? '<path d="M3 8l4 3 5-6 5 6 4-3-2 11H5L3 8z"/><path d="M5 19h14"/>'
+      : '<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8"/>';
 }
+if (premiumSession()) theme = 'gold';
 setTheme(theme);
-themeBtn.onclick = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+themeBtn.onclick = () => {
+  if (premiumSession()) setTheme(theme === 'gold' ? 'dark' : 'gold');
+  else setTheme(theme === 'dark' ? 'light' : 'dark');
+};
 
 /* ============================================================
    Фоновая заставка (цветы). Если файла нет — остаётся градиент
@@ -2866,10 +3137,10 @@ themeBtn.onclick = () => setTheme(theme === 'dark' ? 'light' : 'dark');
 /* ============================================================
    Настройки: ник, тема
    ============================================================ */
-let cfg = {nick:'', theme: theme,
+let cfg = {nick:'', theme: theme, aiName:'', sysPrompt:'',
             provider:'openrouter', base:DEFAULT_BASE, apiKey:DEFAULT_API_KEY, model:DEFAULT_MODEL};
 try { Object.assign(cfg, JSON.parse(localStorage.getItem(CFG_KEY) || '{}')); } catch(e){}
-if (cfg.theme) setTheme(cfg.theme);
+if (cfg.theme) setTheme(premiumSession() ? 'gold' : cfg.theme);
 
 /* ---------- адрес и ключ провайдера (берутся из настроек) ---------- */
 function isLocal(){ return cfg.provider === 'lmstudio'; }
@@ -2901,6 +3172,8 @@ function renderNickPrev(){
 
 /* ---------- вкладки настроек: Общие / Профиль / API / Разработчик ---------- */
 function showTab(name){
+  /* «Разнообразить» — только для премиума */
+  if (name === 'vibe' && !isPremium()) name = 'general';
   document.querySelectorAll('.set-link').forEach(b => {
     const on = b.dataset.tab === name;
     b.classList.toggle('on', on);
@@ -2913,6 +3186,7 @@ function showTab(name){
   $('paneAccount').classList.toggle('on', name === 'account');
   $('paneProfile').classList.toggle('on', name === 'profile');
   $('paneApi').classList.toggle('on', name === 'api');
+  $('paneVibe').classList.toggle('on', name === 'vibe');
   $('paneDev').classList.toggle('on', name === 'dev');
   /* при переключении вкладки контент начинается сверху, а не с середины */
   const body = document.querySelector('#modal .modal-body');
@@ -3009,6 +3283,8 @@ function openSet(){
   if (!sessionValid()){ openAuth('reg'); return; }   // без входа настройки закрыты
   closeSb();
   nickIn.value = cfg.nick || '';
+  $('aiNameIn').value = cfg.aiName || '';
+  $('sysPromptIn').value = cfg.sysPrompt || '';
   document.querySelectorAll('#themeSeg button').forEach(b => b.classList.toggle('on', b.dataset.t === theme));
   renderLangSel();
   renderNickPrev();
@@ -3042,6 +3318,8 @@ function persistCfg(){
 }
 function saveCfg(){
   cfg.nick = nickIn.value.slice(0,24);
+  cfg.aiName = $('aiNameIn').value.trim().slice(0,32);
+  cfg.sysPrompt = $('sysPromptIn').value.trim().slice(0,4000);
   cfg.theme = theme;
   cfg.base = $('apiBaseIn').value.trim();
   cfg.apiKey = $('apiKeyIn').value.trim();
@@ -3055,6 +3333,7 @@ function saveCfg(){
 $('setBtn').onclick = openSet;
 $('closeSet').onclick = closeSet;
 $('saveSet').onclick = saveCfg;
+$('vibeSave').onclick = saveCfg;
 nickIn.addEventListener('input', renderNickPrev);
 nickIn.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); saveCfg(); } });
 modal.addEventListener('click', e => { if (e.target === modal) closeSet(); });
@@ -4012,8 +4291,10 @@ function enterAccount(mail){
   if (!chats.length) newChat();          // у нового аккаунта сразу есть чат
   document.body.classList.remove('locked');
   renderTopbar(); renderAccountPane();
+  applyPremiumUI();
   renderList(); paint(); renderHello(); applyAv(); hideEmpty();
   closeAuth();
+  maybeCongratulate(true);
   showToast(t('authOkIn'));
 }
 
@@ -4026,7 +4307,9 @@ function logOut(){
   inner.innerHTML = '';          // в DOM ничего не остаётся
   ta.value = ''; pending = [];
   document.body.classList.add('locked');
+  closePremiumCongrats();
   renderTopbar(); renderAccountPane();
+  applyPremiumUI();
   renderList(); paint(); hideEmpty();
   closeSet(); closeAuth();
   showToast(t('authOkOut'));
@@ -4088,6 +4371,86 @@ function renderAccountPane(){
   $('accLogout').hidden = !acc;
   hidePass();
 }
+/* ============================================================
+   ПРЕМИУМ-ОФОРМЛЕНИЕ
+   Включается только для Atrgro9@gmail.com: золотая тема,
+   карточка «Золотой красивый» в настройках, золотая V на
+   главном экране и поздравление.
+   ============================================================ */
+const PREM_SEEN_KEY = 'maxiru.premium.greet.v1';
+
+function spawnPremiumSparks(){
+  const box = $('premSparks');
+  if (!box || box.dataset.ready === '1') return;
+  box.dataset.ready = '1';
+  for (let i = 0; i < 24; i++){
+    const s = document.createElement('i');
+    const size = 4 + Math.random() * 7;
+    s.className = 'prem-spark';
+    s.style.left = (Math.random() * 100).toFixed(1) + '%';
+    s.style.width = s.style.height = size.toFixed(1) + 'px';
+    s.style.setProperty('--sx', (Math.random() * 70 - 35).toFixed(0) + 'px');
+    s.style.animationDuration = (3.4 + Math.random() * 3.6).toFixed(2) + 's';
+    s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+    box.appendChild(s);
+  }
+}
+
+function openPremiumCongrats(){
+  const w = $('premModal');
+  if (!w) return;
+  spawnPremiumSparks();
+  w.classList.add('show');
+  w.setAttribute('aria-hidden', 'false');
+}
+function closePremiumCongrats(){
+  const w = $('premModal');
+  if (!w) return;
+  w.classList.remove('show');
+  w.setAttribute('aria-hidden', 'true');
+}
+
+/* применяет/снимает премиум-оформление под текущий аккаунт */
+function isPremium(){ return isPremiumMail(accMail); }
+
+function applyPremiumUI(){
+  const on = isPremium();
+  document.body.classList.toggle('premium', on);
+  if (on) setTheme('gold');
+  else if (theme === 'gold') setTheme('dark');
+  const goldCard = $('themeGold');
+  if (goldCard) goldCard.hidden = !on;
+  const sec = $('premSec');
+  if (sec) sec.hidden = !on;
+  const vibeBtn = $('vibeNavBtn');
+  if (vibeBtn) vibeBtn.hidden = !on;
+  document.querySelectorAll('#themeSeg button').forEach(b => {
+    b.classList.toggle('on', b.dataset.t === theme);
+  });
+}
+
+/* поздравление: force=true — показать при каждом входе премиума,
+   без force — один раз на этом браузере */
+function maybeCongratulate(force){
+  if (!isPremium()) return;
+  if (!force){
+    let seen = '';
+    try { seen = localStorage.getItem(PREM_SEEN_KEY) || ''; } catch(e){}
+    if (seen) return;
+  }
+  setTimeout(() => {
+    if (!isPremium()) return;
+    openPremiumCongrats();
+    try { localStorage.setItem(PREM_SEEN_KEY, String(Date.now())); } catch(e){}
+  }, 900);
+}
+
+$('premOk').onclick = closePremiumCongrats;
+$('premModal').addEventListener('click', e => { if (e.target === $('premModal')) closePremiumCongrats(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $('premModal').classList.contains('show')) closePremiumCongrats();
+});
+
 $('accReveal').onclick = () => {
   if (!acc) return;
   const box = $('accRevealBox');
@@ -5095,6 +5458,17 @@ const THINK_FALLBACK = '(hmm) ';
      OpenRouter и прочие: /no_think не понимают — там раздумья включаем
      параметром reasoning (effort / exclude). */
   let sysPrompt = MODES[mode].prompt;
+  /* ПРЕМИУМ: своё имя ИИ и свой системный промт (вкладка «Разнообразие») */
+  if (isPremium()){
+    const aiName = (cfg.aiName || '').trim();
+    if (aiName){
+      sysPrompt += `\n\nТвоё имя — ${aiName}. Называй себя только так, представься этим именем, если тебя спросят, и не упоминай прежнее имя.`;
+    }
+    const extra = (cfg.sysPrompt || '').trim();
+    if (extra){
+      sysPrompt += `\n\nДОПОЛНИТЕЛЬНЫЕ ПРАВИЛА ОТ ПОЛЬЗОВАТЕЛЯ (выполняй их строго, если они не противоречат безопасности):\n${extra}`;
+    }
+  }
   if (THINK_MODE) sysPrompt += THINK_EN;           // раздумья по-английски
   else if (isLocal()) sysPrompt += '\n\n/no_think';  // локальная модель: раздумья выключены
   if (SEARCH_MODE) sysPrompt += searchRules();     // поиск в интернете разрешён
@@ -5557,10 +5931,12 @@ else { currentId = chats[0].id; renderList(); }
 paint();
 renderTopbar();
 renderAccountPane();
+applyPremiumUI();
 setAuthMode(authMode);
 renderHello();
 applyAv();
 hideEmpty();
+maybeCongratulate(false);
 function hideEmpty(){ empty.classList.toggle('hide', inner.children.length > 0); }
 if (innerWidth >= 860) setTimeout(()=>ta.focus(), 400);
 </script>
