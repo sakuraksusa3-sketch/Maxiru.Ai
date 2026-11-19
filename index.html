@@ -987,13 +987,13 @@ body.z-grab,body.z-grab *{cursor:ns-resize!important;user-select:none!important}
   box-shadow:0 6px 18px -8px rgba(124,58,237,.9);
 }
 .in-wrap{position:relative;display:flex;align-items:center}
-#apiKeyIn,#apiBaseIn,#modelSearch{
+#apiKeyIn,#apiBaseIn,#modelSearch,#modelManualIn{
   width:100%;padding:13px 15px;border-radius:14px;background:var(--glass);border:1px solid var(--line-2);
   color:var(--txt);font-size:15px;font-weight:650;outline:0;transition:.3s var(--ease);
 }
 #apiKeyIn{padding-right:52px}
-#apiKeyIn::placeholder,#apiBaseIn::placeholder,#modelSearch::placeholder{color:var(--txt-3);font-weight:550}
-#apiKeyIn:focus,#apiBaseIn:focus,#modelSearch:focus{border-color:var(--a1);box-shadow:0 0 0 4px rgba(139,92,246,.16);background:var(--glass-h)}
+#apiKeyIn::placeholder,#apiBaseIn::placeholder,#modelSearch::placeholder,#modelManualIn::placeholder{color:var(--txt-3);font-weight:550}
+#apiKeyIn:focus,#apiBaseIn:focus,#modelSearch:focus,#modelManualIn:focus{border-color:var(--a1);box-shadow:0 0 0 4px rgba(139,92,246,.16);background:var(--glass-h)}
 #apiEye{
   position:absolute;right:6px;top:50%;transform:translateY(-50%);
   width:38px;height:38px;flex:0 0 38px;border-radius:11px;
@@ -1581,7 +1581,7 @@ button,a,.chat,.gal button{-webkit-tap-highlight-color:transparent}
   .top.stuck{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 
   /* iOS/Android: поля с кеглем < 16px вызывают автоматический зум при фокусе */
-  #authMail,#authPass,#authPass2,#nickIn,#apiKeyIn,#apiBaseIn,#modelSearch,
+  #authMail,#authPass,#authPass2,#nickIn,#apiKeyIn,#apiBaseIn,#modelSearch,#modelManualIn,
   .acc-reveal input,#ta,.edt-ta{font-size:16px}
 
   .composer-wrap{padding:0 max(14px,var(--safe-r)) max(14px,var(--safe-b)) max(14px,var(--safe-l))}
@@ -2330,6 +2330,7 @@ body.premium .tb-ava{
           <div class="set-sec">
             <div class="set-h" data-i18n="apiBaseTitle">Адрес сервера (Base URL)</div>
             <input type="text" id="apiBaseIn" spellcheck="false" data-i18n-ph="apiBasePh">
+            <div class="fld-h" data-i18n="apiBaseHint">LM Studio: http://127.0.0.1:1234/v1 — можно без /v1, добавим сами. В LM Studio включи CORS (Developer → CORS).</div>
             <div class="set-h" style="margin-top:24px" data-i18n="apiKeyTitle">API-ключ</div>
             <div class="in-wrap">
               <input type="password" id="apiKeyIn" spellcheck="false" data-i18n-ph="apiKeyPh">
@@ -2342,6 +2343,8 @@ body.premium .tb-ava{
 
           <div class="set-sec">
             <div class="set-h" data-i18n="apiModelTitle">Модель</div>
+            <input type="text" id="modelManualIn" spellcheck="false" data-i18n-ph="apiModelManualPh">
+            <div class="fld-h" data-i18n="apiModelManualHint">Впиши имя модели — применится сразу (Enter). Работает и когда список моделей не загрузился.</div>
             <input type="text" id="modelSearch" data-i18n-ph="apiSearchPh">
             <div class="filter-row">
               <div class="filter-sel" id="filterSel">
@@ -2539,7 +2542,7 @@ body.premium .tb-ava{
 /* Локальная модель (LM Studio в сети). Она ДУМАЕТ САМА —
    поэтому включать наш внешний «DeepThink» не нужно, см. THINK_MODE. */
 /* Провайдеры. Адрес — база OpenAI-совместимого API: /chat/completions и /models. */
-const LMSTUDIO_BASE   = 'http://localhost:1234/v1';
+const LMSTUDIO_BASE   = 'http://127.0.0.1:1234/v1';
 const LMSTUDIO_KEY    = '';
 const OPENROUTER_BASE = 'https://openrouter.ai/api/v1';
 const OPENROUTER_KEY  = '';
@@ -2617,6 +2620,8 @@ const I18N = {
     avDefault:'По умолчанию', avNum:'Аватар {n}', avOwn:'Своя',
     tAvKept:'Аватар выбран — он сохранится',
     errServer:'Ошибка сервера: {n}', errEmpty:'Пустой ответ от модели', errFetch:'Не удалось получить ответ',
+    errLocalNet:'Не удалось достучаться до локального сервера. Проверь, что LM Studio запущена и в ней включён CORS (Developer → CORS → Allow all origins). Если сайт открыт из интернета, браузер блокирует доступ к локальной сети — открой скачанный index.html с диска. Адрес: http://127.0.0.1:1234/v1',
+    errNoModel:'Модель не выбрана. Открой Настройки → Модель и API → «Получить список моделей» и выбери модель.',
     chatUntitled:'Новый чат',
     tabApi:'Модель и API',
     tabDev:'Разработчик',
@@ -2628,11 +2633,14 @@ const I18N = {
     devTermHelp:'Модель DeepSeek помогала с кодом, вёрсткой и оформлением этого сайта.',
     devVideoFail:'Не удалось загрузить видео — файл «img/1t2U.gif.mp4» не найден рядом с сайтом.',
     apiProvTitle:'Провайдер', apiProvCustom:'Свой (OpenAI-совместимый)',
-    apiProvHint:'OpenRouter и OpenAI просят API-ключ. LM Studio работает локально без ключа.',
+    apiProvHint:'OpenRouter и OpenAI просят API-ключ. LM Studio работает локально без ключа, но в ней нужно включить CORS (Developer → CORS → Allow all origins) — иначе браузер не пустит сайт.',
     apiBaseTitle:'Адрес сервера (Base URL)', apiBasePh:'https://openrouter.ai/api/v1',
+    apiBaseHint:'LM Studio: http://127.0.0.1:1234/v1 — можно без /v1, добавим сами. В LM Studio включи CORS (Developer → CORS).',
     apiKeyTitle:'API-ключ', apiKeyPh:'sk-or-v1-...',
     apiKeyHint:'Ключ хранится только в этом браузере и уходит провайдеру — больше никуда.',
     apiModelTitle:'Модель', apiSearchPh:'Поиск модели…', apiFetch:'Получить список моделей',
+    apiModelManualPh:'впиши имя модели, например liquid/lfm2.5-1.2b',
+    apiModelManualHint:'Впиши имя модели — применится сразу (Enter). Работает и когда список моделей не загрузился.',
     apiLoading:'Загружаю список моделей…', apiLoaded:'Загружено моделей: {n}',
     apiErr:'Не удалось загрузить модели: {n}',
     apiNoModels:'Список пуст. Нажмите «Получить список моделей».', apiNoFound:'Ничего не найдено',
@@ -2717,6 +2725,8 @@ const I18N = {
     avDefault:'Default', avNum:'Avatar {n}', avOwn:'Custom',
     tAvKept:'Avatar selected — it will be saved',
     errServer:'Server error: {n}', errEmpty:'Empty response from the model', errFetch:'Could not get a response',
+    errLocalNet:'Could not reach the local server. Make sure LM Studio is running and has CORS enabled (Developer → CORS → Allow all origins). If the site is opened from the internet, the browser blocks local network access — open the downloaded index.html from disk instead. Address: http://127.0.0.1:1234/v1',
+    errNoModel:'No model selected. Open Settings → Model & API → “Get model list” and pick a model.',
     chatUntitled:'New chat',
     tabApi:'Model & API',
     tabDev:'Developer',
@@ -2728,11 +2738,14 @@ const I18N = {
     devTermHelp:'The DeepSeek model helped with the code, layout and design of this site.',
     devVideoFail:'Could not load the video — «img/1t2U.gif.mp4» was not found next to the site.',
     apiProvTitle:'Provider', apiProvCustom:'Custom (OpenAI-compatible)',
-    apiProvHint:'OpenRouter and OpenAI need an API key. LM Studio runs locally, no key needed.',
+    apiProvHint:'OpenRouter and OpenAI need an API key. LM Studio runs locally with no key, but you must enable CORS in it (Developer → CORS → Allow all origins), otherwise the browser blocks the site.',
     apiBaseTitle:'Server address (Base URL)', apiBasePh:'https://openrouter.ai/api/v1',
+    apiBaseHint:'LM Studio: http://127.0.0.1:1234/v1 — /v1 can be omitted, we add it. Enable CORS in LM Studio (Developer → CORS).',
     apiKeyTitle:'API key', apiKeyPh:'sk-or-v1-...',
     apiKeyHint:'The key stays in this browser only and is sent to the provider — nowhere else.',
     apiModelTitle:'Model', apiSearchPh:'Search models…', apiFetch:'Load model list',
+    apiModelManualPh:'type the model name, e.g. liquid/lfm2.5-1.2b',
+    apiModelManualHint:'Type the model name — it applies right away (Enter). Works even if the model list failed to load.',
     apiLoading:'Loading model list…', apiLoaded:'Models loaded: {n}',
     apiErr:'Could not load models: {n}',
     apiNoModels:'List is empty. Press “Load model list”.', apiNoFound:'Nothing found',
@@ -2817,6 +2830,8 @@ const I18N = {
     avDefault:'За замовчуванням', avNum:'Аватар {n}', avOwn:'Свій',
     tAvKept:'Аватар вибрано — він збережеться',
     errServer:'Помилка сервера: {n}', errEmpty:'Порожня відповідь від моделі', errFetch:'Не вдалося отримати відповідь',
+    errLocalNet:'Не вдалося звернутися до локального сервера. Перевір, чи запущено LM Studio і чи увімкнено CORS (Developer → CORS → Allow all origins). Якщо сайт відкритий з інтернету, браузер блокує доступ до локальної мережі — відкрий завантажений index.html з диска. Адреса: http://127.0.0.1:1234/v1',
+    errNoModel:'Модель не вибрана. Відкрий Налаштування → Модель і API → «Отримати список моделей» і обери модель.',
     chatUntitled:'Новий чат',
     tabApi:'Модель та API',
     tabDev:'Розробник',
@@ -2828,11 +2843,14 @@ const I18N = {
     devTermHelp:'Модель DeepSeek допомагала з кодом, версткою та оформленням цього сайту.',
     devVideoFail:'Не вдалося завантажити відео — файл «img/1t2U.gif.mp4» не знайдено поруч із сайтом.',
     apiProvTitle:'Провайдер', apiProvCustom:'Свій (OpenAI-сумісний)',
-    apiProvHint:'OpenRouter і OpenAI вимагають API-ключ. LM Studio працює локально без ключа.',
+    apiProvHint:'OpenRouter і OpenAI вимагають API-ключ. LM Studio працює локально без ключа, але в ній треба увімкнути CORS (Developer → CORS → Allow all origins) — інакше браузер не пустить сайт.',
     apiBaseTitle:'Адреса сервера (Base URL)', apiBasePh:'https://openrouter.ai/api/v1',
+    apiBaseHint:'LM Studio: http://127.0.0.1:1234/v1 — можна без /v1, додамо самі. У LM Studio увімкни CORS (Developer → CORS).',
     apiKeyTitle:'API-ключ', apiKeyPh:'sk-or-v1-...',
     apiKeyHint:'Ключ зберігається лише в цьому браузері і йде провайдеру — більше нікуди.',
     apiModelTitle:'Модель', apiSearchPh:'Пошук моделі…', apiFetch:'Отримати список моделей',
+    apiModelManualPh:'впиши назву моделі, наприклад liquid/lfm2.5-1.2b',
+    apiModelManualHint:'Впиши назву моделі — застосується одразу (Enter). Працює і коли список моделей не завантажився.',
     apiLoading:'Завантажую список моделей…', apiLoaded:'Завантажено моделей: {n}',
     apiErr:'Не вдалося завантажити моделі: {n}',
     apiNoModels:'Список порожній. Натисніть «Отримати список моделей».', apiNoFound:'Нічого не знайдено',
@@ -2917,6 +2935,8 @@ const I18N = {
     avDefault:'デフォルト', avNum:'アバター {n}', avOwn:'カスタム',
     tAvKept:'アイコンを選択しました — 保存されます',
     errServer:'サーバーエラー: {n}', errEmpty:'モデルからの応答が空です', errFetch:'応答を取得できませんでした',
+    errLocalNet:'ローカルサーバーに接続できません。LM Studio が起動しているか、CORS が有効か (Developer → CORS → Allow all origins) を確認してください。インターネットから開く場合はブラウザがローカルネットワークをブロックします。ダウンロードした index.html をディスクから開いてください。アドレス: http://127.0.0.1:1234/v1',
+    errNoModel:'モデルが選択されていません。設定 → モデルと API → 「モデル一覧を取得」を開いてモデルを選んでください。',
     chatUntitled:'新しいチャット',
     tabApi:'モデルとAPI',
     tabDev:'開発者',
@@ -2928,11 +2948,14 @@ const I18N = {
     devTermHelp:'DeepSeekのモデルが、このサイトのコード・レイアウト・デザインを支えました。',
     devVideoFail:'動画を読み込めませんでした — 「img/1t2U.gif.mp4」がサイト内に見つかりません。',
     apiProvTitle:'プロバイダー', apiProvCustom:'カスタム（OpenAI互換）',
-    apiProvHint:'OpenRouterとOpenAIはAPIキーが必要です。LM Studioはローカルで動作しキーは不要です。',
+    apiProvHint:'OpenRouterとOpenAIはAPIキーが必要です。LM Studioはローカルで動作しキーは不要ですが、CORSを有効に (Developer → CORS → Allow all origins) にしないとブラウザが接続をブロックします。',
     apiBaseTitle:'サーバーアドレス（Base URL）', apiBasePh:'https://openrouter.ai/api/v1',
+    apiBaseHint:'LM Studio: http://127.0.0.1:1234/v1 — /v1 は省略できます（自動で補完）。LM Studio では CORS を有効に (Developer → CORS)。',
     apiKeyTitle:'APIキー', apiKeyPh:'sk-or-v1-...',
     apiKeyHint:'キーはこのブラウザーにのみ保存され、プロバイダー以外には送信されません。',
     apiModelTitle:'モデル', apiSearchPh:'モデルを検索…', apiFetch:'モデル一覧を取得',
+    apiModelManualPh:'モデル名を直接入力（例: liquid/lfm2.5-1.2b）',
+    apiModelManualHint:'モデル名を入力するとすぐに反映されます（Enter）。モデル一覧が取得できない場合も使えます。',
     apiLoading:'モデル一覧を読み込み中…', apiLoaded:'読み込み済みモデル: {n}',
     apiErr:'モデル一覧を取得できませんでした: {n}',
     apiNoModels:'一覧が空です。「モデル一覧を取得」を押してください。', apiNoFound:'見つかりません',
@@ -3196,22 +3219,53 @@ themeBtn.onclick = () => {
    ============================================================ */
 let cfg = {nick:'', theme: theme, aiName:'', sysPrompt:'',
             tone:'normal', toneMat:false, toneEmoji:true, toneShort:false,
-            provider:'openrouter', base:DEFAULT_BASE, apiKey:DEFAULT_API_KEY, model:DEFAULT_MODEL};
+            provider:'openrouter', base:DEFAULT_BASE, apiKey:DEFAULT_API_KEY, model:DEFAULT_MODEL,
+            modelManual:false};
 try { Object.assign(cfg, JSON.parse(localStorage.getItem(CFG_KEY) || '{}')); } catch(e){}
 if (cfg.theme) setTheme(premiumSession() ? 'gold' : cfg.theme);
 
 /* ---------- адрес и ключ провайдера (берутся из настроек) ---------- */
-function isLocal(){ return cfg.provider === 'lmstudio'; }
+/* Локальный сервер = LM Studio или любой OpenAI-совместимый на этом же компе.
+   Определяем по провайдеру И по адресу — тогда «Свой» с 127.0.0.1 тоже считается локальным. */
+function isLocal(){
+  if (cfg.provider === 'lmstudio') return true;
+  return /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\]|0\.0\.0\.0)(:\d+)?(\/|$)/i.test(apiBase());
+}
 /* OpenRouter умеет сам искать в интернете (серверный инструмент web_search). */
 function isOpenRouter(){
   return cfg.provider === 'openrouter' || /openrouter\.ai/i.test(cfg.base || '');
 }
 function provBase(){ const p = PROVIDERS[cfg.provider]; return p ? p.base : ''; }
-function apiBase(){ return (cfg.base || provBase() || '').trim().replace(/\/+$/,''); }
+/* Адрес приводим к базе OpenAI-совместимого API.
+   Частая ошибка: вставляют «http://127.0.0.1:1234» без /v1 или целиком
+   «.../v1/chat/completions» — из-за этого запрос уходит 404-м. */
+function normBase(raw){
+  let s = String(raw || '').trim();
+  if (!s) return '';
+  if (!/^https?:\/\//i.test(s)) s = 'http://' + s.replace(/^\/+/,'');
+  s = s.replace(/\/+$/,'');
+  s = s.replace(/\/chat\/completions$/i,'').replace(/\/models$/i,'').replace(/\/+$/,'');
+  const rest = s.replace(/^https?:\/\//i,'');
+  if (!rest.includes('/')) s += '/v1';     // адрес без пути → добавляем /v1
+  return s;
+}
+function apiBase(){ return normBase(cfg.base || provBase() || ''); }
 function apiKeyVal(){ return (cfg.apiKey || '').trim(); }
 function chatUrl(){ return apiBase() + '/chat/completions'; }
 function modelsUrl(){ return apiBase() + '/models'; }
-function modelId(){ return (cfg.model || DEFAULT_MODEL).trim(); }
+function modelId(){ return (cfg.model || '').trim() || (isLocal() ? '' : DEFAULT_MODEL); }
+
+/* Запрос к серверу. Сетевой сбой (сервер выключен, CORS запрещён) —
+   TypeError без текста, поэтому для локального сервера даём понятную подсказку. */
+async function apiFetch(url, opts){
+  try{
+    return await fetch(url, opts);
+  }catch(e){
+    if (e && e.name === 'AbortError') throw e;
+    if (isLocal()) throw new Error(t('errLocalNet'));
+    throw e;
+  }
+}
 
 const helloEl = $('hello'), nickIn = $('nickIn'), nickPrev = $('nickPrev'),
       modal = $('modal');
@@ -3526,7 +3580,7 @@ renderGal();
 const provSel = $('provSel'), apiBaseIn = $('apiBaseIn'), apiKeyIn = $('apiKeyIn'),
       modelSearch = $('modelSearch'), modelsBox = $('modelsBox'), apiStatus = $('apiStatus'),
       curModelLine = $('curModelLine'), filterSel = $('filterSel'), quickFree = $('quickFree'),
-      modelsCount = $('modelsCount');
+      modelsCount = $('modelsCount'), modelManualIn = $('modelManualIn');
 // свой экранировщик: общий const esc объявлен ниже по файлу, а escA из renderGal() — локальный
 const escM = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
                      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
@@ -3546,6 +3600,7 @@ function renderApiPane(){
   provSel.querySelectorAll('[data-p]').forEach(b => b.classList.toggle('on', b.dataset.p === cfg.provider));
   apiBaseIn.value = cfg.base || '';
   apiKeyIn.value = cfg.apiKey || '';
+  modelManualIn.value = cfg.model || '';
   renderCurModel();
   renderModels(modelSearch.value);
   renderFreeChips();
@@ -3608,7 +3663,7 @@ async function loadModels(){
     const headers = {'Accept':'application/json'};
     const k = apiKeyVal();
     if (k) headers['Authorization'] = 'Bearer ' + k;
-    const res = await fetch(modelsUrl(), {headers});
+    const res = await apiFetch(modelsUrl(), {headers});
     if (!res.ok){
       let msg = 'HTTP ' + res.status;
       try{ const j = await res.json(); if (j && j.error && j.error.message) msg = j.error.message; }catch(e){}
@@ -3631,10 +3686,43 @@ async function loadModels(){
     renderModelsCount();
     renderFreeChips();
     renderModels(modelSearch.value);
+    autoPickLocalModel();
   }catch(err){
     apiStatus.className = 'status-line err';
     apiStatus.textContent = t('apiErr', {n: (err && err.message) || err});
   }
+}
+/* Локальный сервер у каждого свой: набор моделей разный. Если выбранной модели
+   на сервере нет (или модель не выбрана вовсе) — берём ту, что уже загружена
+   в LM Studio (она отвечает сразу), иначе — первую чат-модель из списка. */
+async function autoPickLocalModel(){
+  if (!isLocal() || !modelsAll.length) return;
+  if (cfg.modelManual) return;   // модель вписали руками — не трогаем
+  const chatModels = modelsAll.filter(m => !/embed|bge-|e5-|whisper|rerank|tts/i.test(m.id));
+  const pool = chatModels.length ? chatModels : modelsAll;
+  const cur = (cfg.model || '').trim();
+  if (cur && pool.some(m => m.id === cur)) return;
+  if (cur && modelsAll.some(m => m.id === cur)) return;
+  let pick = pool[0];
+  /* LM Studio сообщает, какие модели уже загружены в память */
+  try{
+    const r = await fetch(apiBase().replace(/\/v1$/,'') + '/api/v0/models');
+    if (r.ok){
+      const jj = await r.json();
+      const list = jj.data || jj.models || [];
+      const loaded = list.filter(m => m.state === 'loaded');
+      const llm = loaded.find(m => (m.type || 'llm') === 'llm' && pool.some(p => p.id === m.id));
+      const any = loaded.find(m => pool.some(p => p.id === m.id));
+      const hit = llm || any;
+      if (hit) pick = pool.find(p => p.id === hit.id);
+    }
+  }catch(e){}
+  if (!pick) return;
+  cfg.model = pick.id;
+  persistCfg();
+  renderCurModel();
+  renderModels(modelSearch.value);
+  renderFreeChips();
 }
 provSel.addEventListener('click', e => {
   const b = e.target.closest('[data-p]');
@@ -3645,9 +3733,11 @@ provSel.addEventListener('click', e => {
   // ключ от прошлого провайдера в новый не тащим
   cfg.apiKey = '';
   cfg.model = '';   // модель у нового провайдера другая — выберешь из списка
+  cfg.modelManual = false;
   provSel.querySelectorAll('[data-p]').forEach(x => x.classList.toggle('on', x === b));
   apiBaseIn.value = cfg.base || '';
   apiKeyIn.value = cfg.apiKey || '';
+  modelManualIn.value = '';
   persistCfg();
   loadModels();
 });
@@ -3658,9 +3748,38 @@ filterSel.addEventListener('click', e => {
   filterSel.querySelectorAll('[data-f]').forEach(x => x.classList.toggle('on', x === b));
   renderModels(modelSearch.value);
 });
-apiBaseIn.addEventListener('input', () => { cfg.base = apiBaseIn.value.trim(); persistCfg(); });
+apiBaseIn.addEventListener('input', () => {
+  cfg.base = apiBaseIn.value.trim();
+  /* Адрес на этом же компе — значит локальный сервер, а не OpenRouter.
+     Переключаем провайдера, чтобы параметры запроса были правильными. */
+  if (cfg.base && /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\]|0\.0\.0\.0)(:\d+)?(\/|$)/i.test(cfg.base)
+      && cfg.provider !== 'lmstudio'){
+    cfg.provider = 'lmstudio';
+    provSel.querySelectorAll('[data-p]').forEach(x => x.classList.toggle('on', x.dataset.p === 'lmstudio'));
+  }
+  persistCfg();
+});
 apiKeyIn.addEventListener('input', () => { cfg.apiKey = apiKeyIn.value.trim(); persistCfg(); });
 modelSearch.addEventListener('input', () => renderModels(modelSearch.value));
+/* Модель можно вписать вручную — без списка и без кнопок. */
+modelManualIn.addEventListener('input', () => {
+  cfg.model = modelManualIn.value.trim();
+  cfg.modelManual = true;
+  persistCfg();
+  renderCurModel();
+  renderModels(modelSearch.value);
+});
+modelManualIn.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  cfg.model = modelManualIn.value.trim();
+  cfg.modelManual = true;
+  persistCfg();
+  renderCurModel();
+  renderModels(modelSearch.value);
+  renderModelSel();
+  showToast(t('apiModelSaved'));
+});
 $('fetchModels').onclick = loadModels;
 $('apiEye').onclick = () => {
   const show = apiKeyIn.type === 'password';
@@ -3669,6 +3788,8 @@ $('apiEye').onclick = () => {
 /* выбор модели — и в списке, и в быстрых чипах */
 function pickModel(id){
   cfg.model = id;
+  cfg.modelManual = false;
+  if (modelManualIn.value !== id) modelManualIn.value = id;
   renderModels(modelSearch.value);
   renderFreeChips();
   renderCurModel();
@@ -5640,12 +5761,14 @@ const THINK_FALLBACK = '(hmm) ';
   }
 
   try{
-    const headers = {
-      'Content-Type':'application/json',
-      'Authorization':'Bearer ' + apiKeyVal(),
-      'HTTP-Referer': (location.origin && location.origin !== 'null') ? location.origin : 'https://maxiru.ai',
-      'X-Title': 'Maxiru.AI'
-    };
+    if (!modelId()) throw new Error(t('errNoModel'));
+    const headers = {'Content-Type':'application/json'};
+    const key0 = apiKeyVal();
+    if (key0) headers['Authorization'] = 'Bearer ' + key0;
+    if (!isLocal()){
+      headers['HTTP-Referer'] = (location.origin && location.origin !== 'null') ? location.origin : 'https://maxiru.ai';
+      headers['X-Title'] = 'Maxiru.AI';
+    }
     /* Раунды: первый — обычный запрос, следующие — продолжение после
        выполнения собственного инструмента поиска (не-OpenRouter провайдеры). */
     for (let round = 0; round < 4; round++){
@@ -5653,7 +5776,7 @@ const THINK_FALLBACK = '(hmm) ';
        тогда провайдер просит урезать max_tokens. Урезаем вдвое и пробуем снова. */
     let res = null, msg = '', mt = reqBody.max_tokens, noCredits = false;
     for (let attempt = 0; attempt < 3; attempt++){
-      res = await fetch(chatUrl(), {
+      res = await apiFetch(chatUrl(), {
         method:'POST', signal: controller.signal, headers,
         body: JSON.stringify({...reqBody, max_tokens: mt})
       });
@@ -5665,6 +5788,12 @@ const THINK_FALLBACK = '(hmm) ';
       if (/insufficient credits|never purchased credits|add credits|недостаточно кредит/i.test(msg)){
         noCredits = true;
         break;
+      }
+      /* Локальный сервер может не понимать инструменты (tools) —
+         тогда повторяем запрос без них. */
+      if (reqBody.tools && /tool|function/i.test(msg) && attempt < 2){
+        delete reqBody.tools; delete reqBody.tool_choice;
+        continue;
       }
       if (/credits|afford|max_tokens/i.test(msg) && mt > 512){
         mt = Math.max(512, Math.floor(mt / 2));
